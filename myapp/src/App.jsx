@@ -5,8 +5,8 @@ import { useState } from 'react'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  return isLoggedIn ? (<><Logout setIsLoggedIn={setIsLoggedIn}/></>) : (<><Login setIsLoggedIn={setIsLoggedIn} /></>);
+  const [saveId, setSaveId] = useState('');
+  return isLoggedIn ? (<><Logout setIsLoggedIn={setIsLoggedIn} saveId={saveId}/></>) : (<><Login setIsLoggedIn={setIsLoggedIn} setSaveId={setSaveId}/></>);
 }
 
 export default App

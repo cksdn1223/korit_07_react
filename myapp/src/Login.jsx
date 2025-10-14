@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Login({ setIsLoggedIn }){
+function Login({ setIsLoggedIn, setSaveId }){
   // 입력 필드를 위한 상태
   const [inputs, setInputs] = useState({
     id: '',
@@ -20,14 +20,15 @@ function Login({ setIsLoggedIn }){
     setInputs({ id: '', pw: '' }); // 입력 필드 초기화
     alert(`${id}님 환영합니다!`);
     setIsLoggedIn(true);
+    setSaveId(id);
   };
 
   return (
-    <div className="lg-container">
+    <form className="lg-container">
       <input name="id" type="text" placeholder="ID를 입력하세요." value={id} onChange={handleInputChange}/>
       <input name="pw" type="password" placeholder="PW를 입력하세요." value={pw} onChange={handleInputChange}/>
       <button onClick={login}>로그인</button>
-    </div>
+    </form>
   );
 }
 
