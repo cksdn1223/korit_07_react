@@ -10,10 +10,10 @@ function App() {
 
   return (
     <AuthContext.Provider value={username}>
+      <MyForm />
       <MyComponent/>
       <MyTable />
       <MyComponent2 />
-      <MyForm />
     </AuthContext.Provider>
   )
 }
