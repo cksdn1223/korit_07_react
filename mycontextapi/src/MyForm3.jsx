@@ -11,11 +11,6 @@ function MyForm3() {
   const handleSubmit = (event) => {
     alert(`Hello, ${user.firstName} ${user.lastName}`);
     event.preventDefault();
-    setUser({
-      firstName: '',
-      lastName: '',
-      email: ''
-    })
   }
 
   const handleChange = (event) => {
@@ -35,7 +30,6 @@ function MyForm3() {
       <input type="text" value={user.email} name="email" onChange={handleChange}/> <br />
       <input type="submit" />
     </form>
-    
   );
 }
 

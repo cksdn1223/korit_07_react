@@ -1,13 +1,10 @@
 import './App.css'
-import MyForm3 from './MyForm3';
-import MyForm from './MyForm';
-
+import MyForm4 from './MyForm4';
 
 function App() {
   return (
     <>
-      <MyForm3 />
-      <MyForm />
+      <MyForm4 />
     </>
   )
 }
