@@ -1,23 +1,30 @@
-import { useContext } from "react";
-import AuthContext from "./AuthContext";
-
+import { useState } from "react";
 function MyForm() {
-  const authContext = useContext(AuthContext);
 
-  // Form이 제출될때 호출될 수 있도록 작성
-  const handleSubmit = (e) => {
-    e.preventDefault(); // md 파일에서 작성한 기본 동작 방지 메서드
-    // 그러면 onSubmit에 딸려있는 default는 뭐냐면 양식 제출입니다. -> DB나 백엔드로
-    alert(`제출 시에 나오는 경고창입니다. ${authContext}`);
+  const [text, setText] = useState('');
+
+  // const handleChange = (event) => {
+  //   setText(event.target.value);
+  //   console.log(text);
+  // }
+
+  const handleSubmit = (event) => {
+    alert(`'${text}' 라고 입력했음`);
+    event.preventDefault();
   }
 
+  // const [color, setColor] = useState('#242424');
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input type="submit" value='제출 !'/>
+      <form onSubmit={handleSubmit} >
+        <input type="text" onChange={event => setText(event.target.value)} value={text} />
+        <br />
+        {/* <input type="color" value={color} onChange={(e)=>setColor(e.target.value)}/> */}
+        <br />
+        <input type="submit" value='클릭하세요' />
       </form>
     </>
   );
-}
+}                                                  
 
 export default MyForm;

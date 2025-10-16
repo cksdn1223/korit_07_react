@@ -1,20 +1,14 @@
 import './App.css'
-import AuthContext from './AuthContext'
-import MyComponent from './MyComponent'
-import MyComponent2 from './MyComponent2';
+import MyForm3 from './MyForm3';
 import MyForm from './MyForm';
-import MyTable from './MyTable'
+
 
 function App() {
-  const username = '김일';
-
   return (
-    <AuthContext.Provider value={username}>
+    <>
+      <MyForm3 />
       <MyForm />
-      <MyComponent/>
-      <MyTable />
-      <MyComponent2 />
-    </AuthContext.Provider>
+    </>
   )
 }
 
