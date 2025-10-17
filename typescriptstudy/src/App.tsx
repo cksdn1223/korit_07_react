@@ -1,13 +1,22 @@
+import { ChangeEvent, useState } from 'react'
 import './App.css'
-import KeyBoard from './KeyBoard'
-function App() {
 
+function App() {
+  const [ name, setName ] = useState('');
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(`이름 ${name}`);
+  }
   return (
     <>
-      {/* <HelloComponent name='김일' age={20} /> */}
-      <KeyBoard />
-      <br />
-      {/* <ByeComponent name='김일' /> */}
+      <form onSubmit={handleSubmit}>
+        <input type="text" onChange={handleChange} value={name}/>
+        <input type="submit" value={'제출'}/>
+      </form>
     </>
   )
 }

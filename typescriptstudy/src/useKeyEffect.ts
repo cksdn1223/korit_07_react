@@ -1,14 +1,14 @@
-import { useEffect } from "react";
+import { MutableRefObject, useEffect } from "react";
 
-function useKeyEffect(ref) {
+function useKeyEffect(ref: MutableRefObject<HTMLButtonElement | null>) {
   useEffect(()=>{
-    const handleKeyDown = (e) => {
-      if (e.key === ref.current.innerHTML) {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (ref.current && e.key === ref.current.innerHTML) {
         ref.current.style.backgroundColor = 'black';
       }
     };
-    const handleKeyUp = (e) => {
-      if (e.key === ref.current.innerHTML) {
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (ref.current && e.key === ref.current.innerHTML) {
         ref.current.style.backgroundColor = 'gray';
       }
     }

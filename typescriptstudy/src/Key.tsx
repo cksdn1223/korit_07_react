@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import useKeyEffect from './useKeyEffect.ts'
-function Key({alp}) {
-  const buttonRef = useRef(null);
+function Key({alp}: {alp:string}) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   useKeyEffect(buttonRef);
   return (
     <>
