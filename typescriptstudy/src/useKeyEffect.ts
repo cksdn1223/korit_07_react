@@ -2,22 +2,22 @@ import { MutableRefObject, useEffect } from "react";
 
 function useKeyEffect(ref: MutableRefObject<HTMLButtonElement | null>) {
   useEffect(()=>{
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (ref.current && e.key === ref.current.innerHTML) {
+      if (ref.current && e.key.toUpperCase() === ref.current.innerHTML.toUpperCase()) {
         ref.current.style.backgroundColor = 'black';
       }
     };
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (ref.current && e.key === ref.current.innerHTML) {
+      if (ref.current && e.key.toUpperCase() === ref.current.innerHTML.toUpperCase()) {
         ref.current.style.backgroundColor = 'gray';
       }
     }
-    document.removeEventListener('keyup', handleKeyUp);
+    document.addEventListener('keyup', handleKeyUp);
     document.addEventListener('keydown', handleKeyDown);
-
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.addEventListener('keyup', handleKeyUp);
+      document.removeEventListener('keyup', handleKeyUp);
     }
   }, [ref]);
 }
