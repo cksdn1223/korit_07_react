@@ -1,8 +1,8 @@
-import { MutableRefObject, useEffect } from "react";
+import { MutableRefObject, useContext, useEffect } from "react";
+import StrContext from "./StrContext";
 
 function useKeyEffect(ref: MutableRefObject<HTMLButtonElement | null>) {
   useEffect(()=>{
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (ref.current && e.key.toUpperCase() === ref.current.innerHTML.toUpperCase()) {
         ref.current.style.backgroundColor = 'black';
