@@ -55,7 +55,7 @@ function AddCar() {
 
   return (
     <>
-      <Button onClick={handleClickOpen}>New Car</Button>
+      <Button onClick={handleClickOpen} variant="outlined">New Car</Button>
       <Dialog open={open}>
         <DialogTitle>New Car</DialogTitle>
         <CarDialogContent car={car} handleChange={handleChange}/>
