@@ -1,0 +1,85 @@
+import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import '../practice.css'
+import { ChangeEvent, useState } from "react";
+import { deleteCompleted, saveTodo, updateTodo } from "../apis/todoapis";
+import { Button, TextField } from "@mui/material";
+
+export type Todo = {
+  id: number,
+  content: string,
+  isCompleted: boolean
+}
+
+function Todolist({ username }) {
+  const getTodos = async() => {
+    const token = sessionStorage.getItem('jwt')
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/todos`, {
+      headers: {
+        'Authorization': token
+      }
+    })
+    return response.data
+  }
+  const [ inputContent, setInputContent ] = useState({
+    content: ''
+  });
+  const handleAddTodo = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputContent({
+      content: e.target.value
+    });
+  }
+  const queryClient = useQueryClient();
+  const handleDelete = async () => {
+    await deleteCompleted();
+    queryClient.invalidateQueries({ queryKey: ["todos"] });
+  }
+  const handleUpdate = async (id:number) => {
+    await updateTodo(id);
+    queryClient.invalidateQueries({ queryKey: ["todos"] });
+  }
+  const { mutate } = useMutation(saveTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+    onError: err => console.log(err)
+  })
+  const { isLoading, isSuccess, error, data } = useQuery({
+      queryKey: ["todos"],
+      queryFn: getTodos
+    })
+
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+  if (!isSuccess) {
+    return <span>
+      Todo를 불러오는 데 실패했습니다. <br />
+      {error instanceof Error ? error.message : "?Error"}
+    </span>
+  }
+  else {
+    return (
+      <div className='todolist'>
+        <h1 className='title'>{username}님의 Todos</h1>
+        <div className="search-container">
+          <TextField className='input-todo' value={inputContent.content} onChange={handleAddTodo} placeholder='할 일을 작성하세요' label='Todo'/>
+          <Button onClick={() => mutate(inputContent)}>추가</Button>
+          <Button onClick={() => handleDelete()}>제거</Button>
+        </div>
+        <div className='todo-container'>
+          {data.map((todo: Todo) => 
+            <div className="todo" style={{ backgroundColor: todo.isCompleted ? 'gray' : 'white' }} key={todo.id}>
+              <div>{todo.content}</div>
+              <span>
+                <input defaultChecked={todo.isCompleted} type='checkbox' onChange={() => handleUpdate(todo.id)} />
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+}
+
+export default Todolist;
