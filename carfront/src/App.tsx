@@ -1,17 +1,10 @@
 import { AppBar, Toolbar, Typography, Container, CssBaseline } from "@mui/material"
 import { QueryClient, QueryClientProvider} from "@tanstack/react-query"
-import Carlist from "./components/Carlist";
-import AuthContext from "./AuthContext";
-import { useContext, useState } from "react";
 import Login from "./Login";
 const queryClient = new QueryClient();
 
 function App() {
-  const [ isAuthenticated, setAuth ] = useState(false)
-  const value = {
-    isAuthenticated: isAuthenticated,
-    setAuth: setAuth
-  }
+  
   return (
     <Container maxWidth="xl">
       <CssBaseline />
@@ -23,9 +16,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <QueryClientProvider client={queryClient}>
-        <AuthContext.Provider value={value}>
-          {isAuthenticated ? <Carlist /> : <Login />}
-        </AuthContext.Provider>
+        <Login />
       </QueryClientProvider>
     </Container>
   );

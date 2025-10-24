@@ -1,27 +1,30 @@
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle  } from "@mui/material";
+import { Button, TextField, Dialog, DialogContent, DialogTitle  } from "@mui/material";
 import { useState } from "react";
-import { Item } from "./App";
+import { createItem } from "./api/Itemapi";
+import { Item } from "./types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-type AddItemProps = {
-  addItem: (item: Item) => void;
-}
-
-function AddItem(props: AddItemProps) {
+function AddItem() {
   const [ open, setOpen ] = useState(false);
   const [ item, setItem ] = useState<Item>({
-    product: '',
+    itemName: '',
     amount: ''
   })
+  const queryClient = useQueryClient();
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  // App.tsx의 addItem 함수를 호출하고, item 상태를 전달
-  const addItem = () => {
-    props.addItem(item);
-    // TextField에 있는 내용을 다 지우고 Modal을 닫음
-    setItem({product: '',amount: ''});
-    handleClose();
+  const handleClose = () => {
+    setOpen(false);
+    setItem({ itemName: '', amount: '' });
   }
+  const { mutate } = useMutation(createItem, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+      handleClose();
+    },
+    onError: (err) => {
+      console.log(err);
+    }
+  })
 
   return (
     <>
@@ -31,8 +34,8 @@ function AddItem(props: AddItemProps) {
       <Dialog open={open} /*onClose={handleClose}*/>
         <DialogTitle>New Item</DialogTitle>
         <DialogContent>
-          <TextField value={item.product} margin="dense"
-            onChange={e => setItem({...item, product: e.target.value})}
+          <TextField value={item.itemName} margin="dense"
+            onChange={e => setItem({...item, itemName: e.target.value})}
             label="Product/제품명" fullWidth />
           <TextField value={item.amount} margin="dense"
             onChange={e => setItem({...item, amount: e.target.value})}
@@ -42,7 +45,7 @@ function AddItem(props: AddItemProps) {
         <Button onClick={handleClose}>
           Cancel / 취소
         </Button>
-        <Button onClick={addItem}>
+        <Button onClick={() => mutate(item)}>
           Add / 저장
         </Button>
       </Dialog>

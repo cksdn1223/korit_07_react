@@ -2,22 +2,43 @@ import { Button, Container } from '@mui/material';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import { List, ListItem, ListItemText } from '@mui/material';
 import './App.css';
-import { useState } from 'react';
 import AddItem from './AddItem';
+import { deleteItems, getItems } from './api/Itemapi';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import UpdateItem from './UpdateItem';
 
-export type Item = {
-  product: string
-  amount: string
-}
 
-function App() {
-  const [ items, setItems ] = useState<Item[]>([])
-  const addItem = (item:Item) => setItems([item, ...items]);
+function App({ setAuth }) {
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation(deleteItems, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
+    onError: (err) => {
+      console.log(err);
+    }
+  })
+  const { isLoading, isSuccess, error, data } = useQuery({
+    queryKey: ["items"],
+    queryFn: getItems
+  })
 
-  const handleDelete = (index: number) => {
-    setItems(items.filter((_, i) => i !== index))
+  if (isLoading) {
+    return <CircularProgress />
   }
-  return (
+  if (!isSuccess) {
+    return <span>
+      아이템들을 불러오는 데 실패했습니다. <br />
+      {error instanceof Error ? error.message : "?Error"} <br />
+      <Button onClick={() => {
+        localStorage.removeItem('jwt');
+        const re = () =>setAuth(false);
+        re();
+      }}>돌아가기</Button>
+    </span>
+  }
+  else return (
     <Container>
       <AppBar position="static">
         <Toolbar>
@@ -26,13 +47,14 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <AddItem addItem={addItem} />
+      <AddItem />
       <List>
         {
-          items.map((item, index) => 
-            <ListItem key={index} divider>
-              <ListItemText primary={item.product} secondary={item.amount} />
-              <Button onClick={()=>handleDelete(index)}>Delete</Button>
+          data.map((item) => 
+            <ListItem key={item.id} divider>
+              <ListItemText primary={item.itemName} secondary={item.amount} />
+              <UpdateItem id={item.id}/>
+              <Button onClick={()=>mutate(item.id)}>Delete</Button>
             </ListItem>
             )
         } 

@@ -1,0 +1,41 @@
+body {
+  background: #e1fffa;  /* fallback for old browsers */
+}
+
+.login-container {
+  height: 50vw;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  gap: 10px;
+}
+
+.todolist {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.todo {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 10px; 
+  background: gray;
+}
+
+.search-container {
+  margin-bottom: 15px;
+}

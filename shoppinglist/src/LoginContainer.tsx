@@ -1,8 +1,8 @@
 import { Button, TextField } from '@mui/material'
-import '../practice.css'
+import './practice.css'
 import axios from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
-import Todolist from './Todolist';
+import App from './App';
 
 type User = {
   username: string;
@@ -36,8 +36,7 @@ function LoginContainer() {
     })
   }
 
-
-  return auth ? <Todolist/> : (
+  return auth ? <App setAuth={setAuth}/> : (
     <div className='login-container'>
       <TextField className='input-id' name='username' value={user.username} onChange={handleChange} type="text" label="ID" variant="outlined"/>
       <TextField className='input-pw' name='password' value={user.password} onChange={handleChange} type="password" label="PW" variant="outlined"/>

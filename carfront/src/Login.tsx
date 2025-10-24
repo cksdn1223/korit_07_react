@@ -1,7 +1,8 @@
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
-import { Button, TextField, Stack } from "@mui/material"
-import AuthContext from "./AuthContext";
+import { Button, TextField, Stack, Snackbar } from "@mui/material"
+import Carlist from "./components/Carlist";
+
 
 type User = {
   username: string;
@@ -9,11 +10,13 @@ type User = {
 }
 
 function Login() {
+  const [ isAuthenticated, setAuth ] = useState(false);
+  const [ open, setOpen ] = useState(false);
   const [ user, setUser ] = useState<User>({
     username: '',
     password: '',
   });
-  const { isAuthenticated, setAuth } = useContext(AuthContext);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUser({...user, [e.target.name]:e.target.value})
   }
@@ -24,13 +27,24 @@ function Login() {
     .then(res => {
       const jwtToken = res.headers.authorization;
       if(jwtToken !== null) sessionStorage.setItem('jwt', jwtToken);
-      console.log('JWT토큰 : ' + jwtToken.substring(7))
       setAuth(true);
     })
-    .catch(err => console.log(err))
+    .catch(err =>{
+      console.log(err);
+      setOpen(true);
+    })
+    .finally(() => {
+      setUser({
+        username: '',
+        password: '',
+      })
+    })
   }
-  return (
-    <>
+
+  if(isAuthenticated) {
+    return <Carlist />
+  } else {
+    return (
       <Stack spacing={2} alignItems='center' mt={2}>
         <TextField 
           name='username'
@@ -47,12 +61,19 @@ function Login() {
           variant='outlined'
           color='primary'
           onClick={handleLogin}
+          style={{backgroundColor:'yellow',fontWeight:'bold'}}
         >
           Login
         </Button>
+        <Snackbar
+          open={open}
+          autoHideDuration={3000}
+          onClose={() => setOpen(false)}
+          message='ID 혹은 비밀번호가 틀렸습니다.'/>
       </Stack>
-    </>
-  );
+    )
+  }
+
 }
 
 export default Login;
